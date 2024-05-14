@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+  mongo:
+    container_name: key_mongo
+    image: mongo
+    volumes:
+      - mongo_service_data:/data
+    ports:
+      - "27017:27017"
+
+    env_file:
+      - .env
+
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+
+    restart: always
+
+  http_service:
+    container_name: key_service
+    build: .
+    ports:
+      - 8000:8000
+
+    env_file:
+      - .env
+
+    depends_on:
+      - mongo
+
+    restart: always
+
+
+volumes:
+  mongo_service_data:
+
+
+
+
